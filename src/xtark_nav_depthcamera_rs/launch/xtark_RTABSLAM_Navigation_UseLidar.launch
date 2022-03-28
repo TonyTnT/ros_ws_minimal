@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+        <include file="$(find xtark_driver)/launch/xtark_bringup.launch"/>
+        <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+                <arg name="align_depth" value="true"/>
+        </include>
+<include file="$(find xtlidar_driver)/launch/XTLIDAR_C25.launch"/>
+
+    <node pkg="laser_filters" type="scan_to_scan_filter_chain" output="log" name="laser_filter">
+          <rosparam command="load" file="$(find xtark_nav)/configuration_files/xtark_laserfilter.yaml"/>
+          <remap from="/scan" to="/scan"/>
+          <remap from="/scan_filtered" to="/scan"/>
+  </node>
+
+  <include file="$(find rtabmap_ros)/launch/demo/demo_xtark_navigation_rs.launch" />
+           <node pkg="tf" type="static_transform_publisher" name="base_link_to_base_footprint" args="0.00 0 0.0 0 0 0 base_link base_footprint 10"/>
+    <node pkg="tf" type="static_transform_publisher" name="base_foot_print_to_laser" args="0.10 0 0.1 0 0 0 base_link laser 10"/>
+    <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_imu"     args="-0.05 0 0.05 -1.57 0 0 base_link imu_link 10"/>
+    <node pkg="tf" type="static_transform_publisher" name="base_footprint_to_camera" args="0.21091 0 0.17748 0 -0.34907 0 base_link camera_link 10"/>
+</launch>
