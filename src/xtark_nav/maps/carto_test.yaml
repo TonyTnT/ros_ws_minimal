@@ -1,4 +1,4 @@
-image: /home/xtark/ros_ws/src/xtark_nav/maps/carto_test.pgm
+image: /home/xtark/ros_ws_minimal/src/xtark_nav/maps/carto_test.pgm
 resolution: 0.05
 origin: [-11.2103, -13.9841, 0.0]
 negate: 0

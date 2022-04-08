@@ -1,4 +1,4 @@
-image: /home/xtark/ros_ws/src/xtark_nav/maps/.pgm
+image: /home/xtark/ros_ws_minimal/src/xtark_nav/maps/.pgm
 resolution: 0.05
 origin: [-7.70154, -5.37269, 0.0]
 negate: 0
