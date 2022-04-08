@@ -4,6 +4,8 @@
 
 <arg name="use_ekf" default="true"/>
 
+<arg name="use_realsense" default="false"/>
+
 <arg name="publish_odom_transform" default="true"/>
 
 <node
@@ -20,6 +22,25 @@
         <remap from="/odom" to="/odom" unless="$(arg use_ekf)"/>
 </node>
 
+
+	<!-- 启动realsense节点 --> 
+
+<arg name="scan_height" default="10.0"/>
+<!-- 启动USB摄像头驱动包 -->
+<group if="$(arg use_realsense)">
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <!-- <arg name="filters" value="pointcloud"/> -->
+        <arg name="align_depth" value="true"/>
+    </include>
+    <include file="$(find depthimage_to_laserscan)/launch/depthimage_to_laserscan_rs.launch">
+        <arg name="scan_height" value="$(arg scan_height)"/>
+    </include>
+    <!-- 启动Web video server功能包，发布摄像头数据 -->
+    <node name="web_video_server" pkg="web_video_server" type="web_video_server" output="log">
+        <param name="port" type="int" value="8080" />
+    </node>
+
+</group>
 	<!-- 启动EKF融合定位节点 -->
 <group if="$(arg use_ekf)">
     <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf" output="screen">
