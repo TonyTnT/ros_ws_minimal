@@ -8,8 +8,8 @@
 #include <thread>
 #include "geometry_msgs/Twist.h"
 
-#define XTARK_LINEAR_SPEED_LIMIT  1.5     // m/s
-#define XTARK_ANGULAR_SPEED_LIMIT 3       // rad/s
+#define XTARK_LINEAR_SPEED_LIMIT  0.5     // m/s
+#define XTARK_ANGULAR_SPEED_LIMIT 1.5       // rad/s
 
 #define XTARK_ENCODER_MAX     2147483647
 #define XTARK_ENCODER_MIN     -2147483648
