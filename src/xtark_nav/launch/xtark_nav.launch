@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="use_realsense" default="false"/>
+    <arg name="use_realsense" default="true"/>
     <arg name="use_ekf" default="true"/>
     <param name="use_sim_time" value="false"/>
 
@@ -21,34 +21,16 @@
     <!-- 启动USB摄像头驱动包 -->
     <group if="$(arg use_realsense)">
         <include file="$(find realsense2_camera)/launch/rs_camera.launch">
-		    <arg name="filters" value="pointcloud"/>
+		    <arg name="enable_pointcloud" value="true"/>
 	    </include>
 
-        <node pkg="nodelet" type="nodelet" name="pcl_manager" args="manager" output="screen" />
-
-        <node pkg="nodelet" type="nodelet" name="voxel_grid" args="load pcl/VoxelGrid pcl_manager" output="screen">
-                <remap from="~input" to="/camera/depth/color/points" />
-                <rosparam>
-                    filter_field_name: z
-                    filter_limit_min: 0.01
-                    filter_limit_max: 1.5
-                    filter_limit_negative: False
-                    leaf_size: 0.05
-                </rosparam>
+        <!-- 启动Web video server功能包，发布摄像头数据 -->
+        <node name="web_video_server" pkg="web_video_server" type="web_video_server" output="log">
+            <param name="port" type="int" value="8080" />
         </node>
-
-        <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan" output="screen">
-            <param name="min_height" value="0.0"/>
-            <param name="max_height" value="1.0"/>
-            <param name="range_max"  value="4.0"/>
-            <param name="range_min"  value="0.1"/>
-            <param name="use_inf"    value="true"/>
-            <param name="target_frame" value="laser_link"/>
-            <remap from="/cloud_in" to="/voxel_grid/output"/>
-            <remap from="/scan"     to="/realsense_scan"/>
-        </node>
-    
     </group>
+
+
 
     <!-- 启动Map server功能包，发布地图 -->
     <arg name="map_file" default="$(find xtark_nav)/maps/ocam_test.yaml"/>

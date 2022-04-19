@@ -37,7 +37,7 @@ void XtarkBase::initNode()
     nh_p_.param<std::string>("imu_frame",imu_frame_,std::string("imu_link"));
     nh_p_.param<bool>("publish_odom_transform", publish_odom_transform_, true);
     nh_p_.param<bool>("enable_sonar", enable_sonar_, true);
-    nh_p_.param<std::string>("port",m_SerialPort_,std::string("/dev/ttyS0"));
+    nh_p_.param<std::string>("port",m_SerialPort_,std::string("/dev/xtark_base"));
     
     nh_p_.param<double>("sonar0_offset_x",sonar_sensor_[0].offset_x,0.0);
     nh_p_.param<double>("sonar0_offset_y",sonar_sensor_[0].offset_y,0.0);
@@ -445,7 +445,7 @@ void XtarkBase::distribute_data(uint8_t msg_type, uint8_t* buffer_data)
         sonar_sensor_[2].range.header.stamp = ros::Time::now();
         sonar_sensor_[3].range.header.stamp = ros::Time::now();
         sonar_sensor_[4].range.header.stamp = ros::Time::now();
-        sonar_0_pub_.publish(sonar_sensor_[0].range);
+        // sonar_0_pub_.publish(sonar_sensor_[0].range);
         sonar_1_pub_.publish(sonar_sensor_[1].range);
         sonar_2_pub_.publish(sonar_sensor_[2].range);
         sonar_3_pub_.publish(sonar_sensor_[3].range);
