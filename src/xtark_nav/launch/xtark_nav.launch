@@ -21,7 +21,9 @@
     <!-- 启动USB摄像头驱动包 -->
     <group if="$(arg use_realsense)">
         <include file="$(find realsense2_camera)/launch/rs_camera.launch">
-		    <arg name="enable_pointcloud" value="true"/>
+		    <arg name="enable_pointcloud"   value="true"/>
+            <arg name="json_file_path"      value="$(find xtark_nav)/configuration_files/realsense_highaccuracy.json"/>
+		    <arg name="filters"             value="disparity,decimation"/>
 	    </include>
 
         <!-- 启动Web video server功能包，发布摄像头数据 -->
@@ -56,11 +58,14 @@
         <rosparam file="$(find xtark_nav)/configuration_files/navigation_params/global_costmap_params.yaml" command="load" />
         <rosparam file="$(find xtark_nav)/configuration_files/navigation_params/base_global_planner_param.yaml" command="load" />
         <rosparam file="$(find xtark_nav)/configuration_files/navigation_params/teb_local_planner_params.yaml" command="load" />
+        <rosparam file="$(find xtark_nav)/configuration_files/navigation_params/ftc_local_planner_params.yaml" command="load" />
         <rosparam file="$(find xtark_nav)/configuration_files/navigation_params/move_base_params.yaml" command="load" />
         <remap from="/scan" to="/scan_filtered"/>
       </node>
 
  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+ <!-- 启动途径点导航包 -->    
+ <include file="$(find follow_waypoints)/launch/follow_waypoints.launch"/>
   <node name="robot_pose_publisher" pkg="robot_pose_publisher" type="robot_pose_publisher"/>
   <arg name="debug" default="false"/>
   <node name="xtark_showMark" pkg="xtark_nav" type="xtark_show_mark.py" output="screen"/>
