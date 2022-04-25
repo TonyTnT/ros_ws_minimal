@@ -1,0 +1,3 @@
+  <launch>
+  <node name="orderBasePublish" pkg="tcs_order" type="orderBasePublishOnce.py" output="screen"/>
+  </launch>
