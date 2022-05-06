@@ -1,12 +1,14 @@
-# Planner selection
-base_global_planner: "global_planner/GlobalPlanner"  
 
-base_local_planner: "teb_local_planner/TebLocalPlannerROS"
+# Planner selection
+# base_global_planner: "global_planner/GlobalPlanner"
+base_global_planner: "SBPLLatticePlanner"
+
 
 GlobalPlanner:                                  # Also see: http://wiki.ros.org/global_planner
   old_navfn_behavior: false                     # Exactly mirror behavior of navfn, use defaults for other boolean parameters, default false
   use_quadratic: true                         # Use the quadratic approximation of the potential. Otherwise, u-se a simpler calculation, default true
   use_dijkstra:  true                          # Use dijkstra's algorithm. Otherwise, A*, default true
+  # if use grid is false will cause move_base/result delay return !!!
   use_grid_path: true                         # Create a path that follows the grid boundaries. Otherwise, use a gradient descent method, default false
   
 
@@ -20,4 +22,10 @@ GlobalPlanner:                                  # Also see: http://wiki.ros.org/
   neutral_cost: 66
   cost_factor: 0.55
 
-  
+SBPLLatticePlanner:
+  environment_type: XYThetaLattice
+  planner_type: ARAPlanner
+  allocated_time: 3.0
+  initial_epsilon: 3.0
+  forward_search: false
+  primitive_filename: /opt/ros/noetic/share/sbpl_lattice_planner/matlab/mprim/pr2.mprim 

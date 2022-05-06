@@ -1,0 +1,217 @@
+
+# teb 参数调试 https://www.guyuehome.com/34465
+base_local_planner: "teb_local_planner/TebLocalPlannerROS"
+# base_local_planner: "base_local_planner/TrajectoryPlannerROS"
+# base_local_planner: "smooth_local_planner/SmoothLocalPlannerROS"
+# base_local_planner: "ftc_local_planner/FTCPlanner"
+# dwa 会卡死 狭窄区域如果需要掉头的时候卡死 
+# 但是行驶过程速度稳定 刹车次数低于 teb
+# base_local_planner: "dwa_local_planner/DWAPlannerROS"
+
+
+TebLocalPlannerROS:
+
+ #  odom_topic: odom
+ odom_topic: /robot_pose_ekf/odom_combined
+ #  map_frame: odom
+ map_frame: /odom_combined
+
+ # Trajectory
+ teb_autosize: True
+ dt_ref: 0.45
+ dt_hysteresis: 0.1
+ global_plan_overwrite_orientation: False
+ global_plan_viapoint_sep: 0.3
+ max_global_plan_lookahead_dist: 1.5
+ feasibility_check_no_poses: 1
+ global_plan_prune_distance: 0.6
+ # Robot
+  # 最大线速度
+ max_vel_x: 0.4
+ max_vel_x_backwards: 0.15
+  # 最大角速度
+ max_vel_theta: 1.0
+  # X轴方向上的最大加速度
+ acc_lim_x: 0
+ acc_lim_theta: 1.5
+ min_turning_radius: 0.0
+ footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
+   type: "point"
+  #  type: "circular"
+  #  radius: 0.22 # for type "circular"
+   #vertices: [[-0.12, -0.12], [-0.12, 0.12],[0.12, 0.12], [0.12, -0.12]]
+
+ # GoalTolerance
+ xy_goal_tolerance: 0.1
+ yaw_goal_tolerance: 0.2
+ # reach goal with vel at zero
+ free_goal_vel: False
+
+ # Obstacles
+ # if there have already set the footprint model do not need t oser min_obstacle_dist
+ min_obstacle_dist: 0.22
+ inflation_dist: 0.1
+ dynamic_obstacle_inflation_dist: 0.25
+ include_costmap_obstacles: True
+ costmap_obstacles_behind_robot_dist: 1.0
+ obstacle_poses_affected: 7  
+ costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSMCCH"
+  #costmap_converter_plugin: "" # deactivate plugin
+ costmap_converter_spin_thread: True
+ costmap_converter_rate: 5
+
+ # Optimization
+ no_inner_iterations: 5
+ no_outer_iterations: 4
+ optimization_activate: True
+ optimization_verbose: False
+ penalty_epsilon: 0.1
+ weight_max_vel_x: 1
+ weight_max_vel_theta: 1
+ weight_acc_lim_x: 1
+ weight_acc_lim_theta: 1
+ weight_kinematics_nh: 1000
+ weight_kinematics_forward_drive: 60
+ weight_kinematics_turning_radius: 1
+ # 根据转换/执行时间对轨迹进行收缩的优化权重 数值越大 转弯越贴近内道 
+ weight_optimaltime: 1
+ weight_obstacle: 50
+ weight_dynamic_obstacle: 10 # not in use yet
+ selection_alternative_time_cost: False # not in use yet
+
+ # Homotopy Class Planner
+ enable_homotopy_class_planning: False
+ enable_multithreading: True
+ simple_exploration: False
+ max_number_classes: 4
+ roadmap_graph_no_samples: 15
+ roadmap_graph_area_width: 5
+ h_signature_prescaler: 0.5
+ h_signature_threshold: 0.1
+ obstacle_keypoint_offset: 0.1
+ obstacle_heading_threshold: 0.45
+ visualize_hc_graph: False
+
+
+TrajectoryPlannerROS:
+  #Set the acceleration limits of the robot
+  acc_lim_th: 0.7
+  acc_lim_x: 0.5
+  acc_lim_y: 0
+
+  #Set the velocity limits of the robot
+  max_vel_x: 0.40
+  min_vel_x: 0.10
+  max_vel_theta: 0.5
+  min_vel_theta: -0.5
+  max_rotational_vel: 1.0
+  min_in_place_rotational_vel: 0.8
+  min_in_place_vel_theta: 0.8
+
+  #The velocity the robot will command when trying to escape from a stuck situation
+  escape_vel: -0.2
+
+  #For this example, we'll use a holonomic robot
+  holonomic_robot: false
+
+  #Set the tolerance on achieving a goal
+  xy_goal_tolerance: 0.1
+  yaw_goal_tolerance: 0.1
+  latch_xy_goal_tolerance: true
+
+  #We'll configure how long and with what granularity we'll forward simulate trajectories
+  sim_time: 1.5
+  sim_granularity: 0.025
+  angular_sim_granularity: 0.025
+  vx_samples: 3
+  vtheta_samples: 20
+  controller_frequency: 1.0
+  planner_frequency: 1.0
+
+  #Parameters for scoring trajectories
+  goal_distance_bias: 0.8
+  path_distance_bias: 1.0
+  occdist_scale: 0.01
+  heading_lookahead: 0.325
+
+  #We'll use the Dynamic Window Approach to control instead of Trajectory Rollout for this example
+  dwa: true
+
+  #How far the robot must travel before oscillation flags are reset
+  oscillation_reset_dist: 0.05
+
+  #Eat up the plan as the robot moves along it
+  prune_plan: false
+
+
+DWAPlannerROS: 
+  acc_lim_th: 1.5 
+  acc_lim_x: 1.5 
+  acc_lim_y: 1.5 
+
+
+  max_vel_x: 0.45 
+  min_vel_x: 0.0 
+
+  max_vel_y: 0.1 
+  min_vel_y: -0.1 
+
+  max_trans_vel: 0.65 
+  min_trans_vel: 0.1 
+  max_rot_vel: 1.0 
+  min_rot_vel: 0.4 
+  sim_time: 1.7 
+  sim_granularity: 0.025 
+  goal_distance_bias: 32.0 
+  path_distance_bias: 24.0 
+  occdist_scale: 0.01 
+  stop_time_buffer: 0.2 
+  oscillation_reset_dist: 0.05 
+  forward_point_distance: 0.325 
+  scaling_speed: 0.25 
+  max_scaling_factor: 0.2 
+  vx_samples: 3 
+  vy_samples: 10 
+  vtheta_samples: 20 
+  sim_period: 0.1 
+  xy_goal_tolerance: 0.2 
+  yaw_goal_tolerance: 0.17 
+  rot_stopped_vel: 0.01 
+  trans_stopped_vel: 0.01
+
+
+SmoothLocalPlannerROS:
+  lookahead_base_dist: 1.5
+  lookahead_time: 1.0
+  lattice_path_samples: 7
+  lattice_path_office: 0.1
+  lattice_path_pub: true
+
+  # optimizer
+  min_turning_radius: 0.2
+  penalty_alpha: 25.0
+  penalty_beta: 25.0
+  penalty_gamma: 30.0
+  simpson_intervals: 8
+
+  # path scoring func
+  # local path 与 gloabl path 近似程度
+  global_path_distance_bias: 1.0
+  collidiing_path_distance_bias: 1.0
+
+  # velocity profile generation
+  ref_vel: 0.15
+  max_vel_x: 0.3
+  acc_lim_x: 2.5
+
+  # controller 
+  lookahead_dist: 0.2
+  
+  # goal tolerance
+  xy_goal_tolerance: 0.2
+  yaw_goal_tolerance: 0.2
+
+  # others
+  odom_topic: odom
+  planning_frequency: 4.0
+  debug: true
