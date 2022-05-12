@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="use_realsense" default="true"/>
+    <arg name="use_realsense" default="false"/>
+    <arg name="use_gemini" default="true"/>
     <arg name="use_ekf" default="true"/>
     <param name="use_sim_time" value="false"/>
 
@@ -27,15 +28,24 @@
 	    </include>
 
         <!-- 启动Web video server功能包，发布摄像头数据 -->
-        <node name="web_video_server" pkg="web_video_server" type="web_video_server" output="log">
+        <!-- <node name="web_video_server" pkg="web_video_server" type="web_video_server" output="log">
             <param name="port" type="int" value="8080" />
-        </node>
+        </node> -->
+    </group>
+    <group if="$(arg use_gemini)">
+        <include file="$(find astra_camera)/launch/stereo_s_u3.launch">
+	    </include>
+
+        <!-- 启动Web video server功能包，发布摄像头数据 -->
+        <!-- <node name="web_video_server" pkg="web_video_server" type="web_video_server" output="log">
+            <param name="port" type="int" value="8080" />
+        </node> -->
     </group>
 
 
 
     <!-- 启动Map server功能包，发布地图 -->
-    <arg name="map_file" default="$(find xtark_nav)/maps/ocam_test.yaml"/>
+    <arg name="map_file" default="/home/xtark/znm_25.yaml"/>
 	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
     <arg name="initial_pose_x" default="0.0"/>

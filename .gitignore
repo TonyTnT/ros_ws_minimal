@@ -1,4 +1,7 @@
 .vscode/*
 build/*
 devel/*
+install/*
 .cat*
+*.pgm
+*.yaml
