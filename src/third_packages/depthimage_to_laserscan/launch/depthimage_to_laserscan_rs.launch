@@ -1,0 +1,20 @@
+<launch>
+    <arg name="scan_height" default="10"/>
+
+	<node pkg="depthimage_to_laserscan" name="depthimage_to_laserscan" type="depthimage_to_laserscan" output="screen">
+		<!-- scan_height：扫描高度
+		scan_time：扫描时间
+		range_min：最小感知距离
+		range_max：最大感知距离
+		output_frame_id：输出伪激光所在坐标系，默认设置为/camera_link -->
+		<param name="scan_height" value="$(arg scan_height)"/>
+		<!--param name="scan_time" value="30"/-->
+		<param name="range_min" value="0.05"/>
+		<param name="range_max" value="4.0"/>
+		<param name="output_frame_id" value="camera_link"/>
+		<remap from="/image" to="/camera/aligned_depth_to_color/image_raw"/>
+		<remap from="/camera_info" to="/camera/aligned_depth_to_color/camera_info" />
+		<remap from="/scan" to="/realsense_scan"/>
+        </node>
+	
+</launch>
