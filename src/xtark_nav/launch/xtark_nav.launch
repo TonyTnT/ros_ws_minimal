@@ -45,8 +45,9 @@
 
 
     <!-- 启动Map server功能包，发布地图 -->
-    <arg name="map_file" default="/home/xtark/znm_25.yaml"/>
-	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+    <!-- <arg name="map_file" default="/home/xtark/znm_25.yaml"/> -->
+	<!-- <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" /> -->
+    
 
     <arg name="initial_pose_x" default="0.0"/>
 	<arg name="initial_pose_y" default="0.0"/>
@@ -72,6 +73,8 @@
         <remap from="/scan" to="/scan_filtered"/>
       </node>
 
+    <include file="$(find multi_level_map_utils)/launch/example.launch">
+    </include>
  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
  <!-- 启动途径点导航包 -->    
  <!-- <include file="$(find follow_waypoints)/launch/follow_waypoints.launch"/> -->
