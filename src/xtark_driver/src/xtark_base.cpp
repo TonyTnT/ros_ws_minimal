@@ -445,7 +445,7 @@ void XtarkBase::distribute_data(uint8_t msg_type, uint8_t* buffer_data)
         sonar_sensor_[2].range.header.stamp = ros::Time::now();
         sonar_sensor_[3].range.header.stamp = ros::Time::now();
         sonar_sensor_[4].range.header.stamp = ros::Time::now();
-        // sonar_0_pub_.publish(sonar_sensor_[0].range);
+        sonar_0_pub_.publish(sonar_sensor_[0].range);
         sonar_1_pub_.publish(sonar_sensor_[1].range);
         sonar_2_pub_.publish(sonar_sensor_[2].range);
         sonar_3_pub_.publish(sonar_sensor_[3].range);

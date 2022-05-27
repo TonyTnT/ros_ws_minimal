@@ -8,7 +8,7 @@ robot_wheel_diameter: 0.13999  #底盘轮径参数，用作里程计线速度相
 robot_wheel_track: 0.3715415       #底盘轮距参数，用作里程计旋转相关解算
 
 
-enable_sonar: false   #超声波驱动碰撞躲避
+enable_sonar: true   #超声波驱动碰撞躲避
 
 safe_distance: 0.1    #机器人超声波安全距离，小于此距离，机器人将会急停
 inflation_slow_distance: 0.05    #超声波减速膨胀区域
